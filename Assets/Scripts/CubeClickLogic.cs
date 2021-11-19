@@ -17,6 +17,8 @@ public class CubeClickLogic : MonoBehaviour
     public Text CubesPerClick;
     public Text UpgCubePerClickPrice;
     public Text UpgExpPerClickPrice;
+    [SerializeField]
+    private Text LightCount;
     private int _scoreMultiply;
     public Level level;
     [SerializeField]
@@ -43,7 +45,8 @@ public class CubeClickLogic : MonoBehaviour
             PlayerPrefs.SetFloat("CubePriceUpgradePrice", 10);
     
         //сброс до начальных значений
-        //PlayerPrefs.SetInt("CurrentExp", 1);
+        PlayerPrefs.SetInt("CurrentExp", 1);
+        PlayerPrefs.SetInt("Light", 0);
         //PlayerPrefs.SetInt("ExpPerClick", 1);
         //PlayerPrefs.SetFloat("CubePerClick", 1);
         //PlayerPrefs.SetFloat("Gold", 0);
@@ -65,6 +68,7 @@ public class CubeClickLogic : MonoBehaviour
         CubesPerClick.text = "<size=34>" + Math.Round(PlayerPrefs.GetFloat("CubePerClick"), 1).ToString() + "</size>";
         UpgCubePerClickPrice.text = Math.Round(PlayerPrefs.GetFloat("CubePerClickUpgradePrice")).ToString();
         UpgExpPerClickPrice.text = Math.Round(PlayerPrefs.GetFloat("ExpUpgradePrice")).ToString();
+        LightCount.text = "" + PlayerPrefs.GetInt("Light");
     }
 
 
@@ -118,7 +122,8 @@ public class CubeClickLogic : MonoBehaviour
         if (CubeTransf.localScale.x < maxCubeSize.x && CubeTransf.localScale.y < maxCubeSize.y && CubeTransf.localScale.z < maxCubeSize.z)
             CubeTransf.localScale += new Vector3(0.2f, 0.2f, 0.2f);
         PlayerPrefs.SetFloat("Score", PlayerPrefs.GetFloat("Score") + PlayerPrefs.GetFloat("CubePerClick") * _scoreMultiply);
-        AddExp();
+        //добавление exp + light при повышении уровня
+        AddLight();
     }
 
     public void AddExp()
@@ -126,6 +131,19 @@ public class CubeClickLogic : MonoBehaviour
         level.AddExp(PlayerPrefs.GetInt("ExpPerClick"));
         PlayerPrefs.SetInt("CurrentExp", level.experience);
         CurrentLvl.text = "LVL: <color=#F3E70D>" + level.currentLevel.ToString() + "</color>";
+    }
+
+    public void AddLight()
+    {
+        int LvlBeforeExpAdd = level.currentLevel;
+
+        AddExp();
+
+        if (LvlBeforeExpAdd < level.currentLevel)
+        {
+            PlayerPrefs.SetInt("Light", PlayerPrefs.GetInt("Light") + LvlBeforeExpAdd);
+            LightCount.text = "" + PlayerPrefs.GetInt("Light");
+        }
     }
 
     private bool isUpgradeAvaliable(string prefName)
