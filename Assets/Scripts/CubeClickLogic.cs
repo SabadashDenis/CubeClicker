@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,6 @@ public class CubeClickLogic : MonoBehaviour
     private Vector3 maxCubeSize = new Vector3(10f, 10f, 10f);
     private MeshRenderer _cubeMesh;
     [SerializeField]
-    private float _cubesPerClick;
     public Text CubesScore;
     public Text ScoreMulValue;
     public Text CurrentLvl;
@@ -23,6 +23,8 @@ public class CubeClickLogic : MonoBehaviour
     public Level level;
     [SerializeField]
     private int _expPerClick;
+
+    private float _autoclickerWaitTime = 0.5f;
 
     public Image BarMask;
     public Image ExpUpgradeArrow;
@@ -43,10 +45,11 @@ public class CubeClickLogic : MonoBehaviour
             PlayerPrefs.SetFloat("CubePerClickUpgradePrice", 10);
         if (PlayerPrefs.GetFloat("CubePriceUpgradePrice") == 0)
             PlayerPrefs.SetFloat("CubePriceUpgradePrice", 10);
-    
+        PlayerPrefs.SetString("CourotineStarted", "No");
+
         //сброс до начальных значений
-        PlayerPrefs.SetInt("CurrentExp", 1);
-        PlayerPrefs.SetInt("Light", 0);
+        //PlayerPrefs.SetInt("CurrentExp", 1);
+        //PlayerPrefs.SetInt("Light", 0);
         //PlayerPrefs.SetInt("ExpPerClick", 1);
         //PlayerPrefs.SetFloat("CubePerClick", 1);
         //PlayerPrefs.SetFloat("Gold", 0);
@@ -59,7 +62,6 @@ public class CubeClickLogic : MonoBehaviour
         level = new Level(1);
         level.experience = PlayerPrefs.GetInt("CurrentExp");
         level.currentLevel = level.GetLevelForXP(level.experience);
-        _cubesPerClick = PlayerPrefs.GetFloat("CubePerClick");
         _expPerClick = PlayerPrefs.GetInt("ExpPerClick");
         CurrentLvl.text = "LVL: <color=#F3E70D>" + level.currentLevel.ToString() + "</color>";
         CubeTransf = Cube.GetComponent<Transform>();
@@ -75,6 +77,11 @@ public class CubeClickLogic : MonoBehaviour
     void Update()
     {
         CubesScore.text = "<size=48>" + Math.Round(PlayerPrefs.GetFloat("Score"),1) + "</size>";
+        CubesPerClick.text = "<size=34>" + Math.Round(PlayerPrefs.GetFloat("CubePerClick"), 1).ToString() + "</size>";
+        LightCount.text = "" + PlayerPrefs.GetInt("Light");
+        UpgCubePerClickPrice.text = Math.Round(PlayerPrefs.GetFloat("CubePerClickUpgradePrice")).ToString();
+        UpgExpPerClickPrice.text = Math.Round(PlayerPrefs.GetFloat("ExpUpgradePrice")).ToString();
+        CurrentLvl.text = "LVL: <color=#F3E70D>" + level.currentLevel.ToString() + "</color>";
         ScoreMulValue.color = _cubeMesh.material.color;
         ScoreMulValue.text = "<size=" + (42 + _scoreMultiply * 8) + ">X" + _scoreMultiply + "</size>";
         CubeTransf.Rotate(new Vector3(9f, 13f, 11.5f) * Time.deltaTime);
@@ -83,6 +90,12 @@ public class CubeClickLogic : MonoBehaviour
         bar.GetCurrentFill();
         ExpUpgradeArrow.gameObject.SetActive(isUpgradeAvaliable("ExpUpgradePrice"));
         CubePerClickUpgradeArrow.gameObject.SetActive(isUpgradeAvaliable("CubePerClickUpgradePrice"));
+
+        if (PlayerPrefs.GetString("AutoClicker") == "Yes" && (PlayerPrefs.GetString("CourotineStarted") != "Yes"))
+        {
+            StartCoroutine("AutoClicker");
+            PlayerPrefs.SetString("CourotineStarted", "Yes");
+        }
     }
 
     private void ChangeCubeScoreAndColor()
@@ -116,21 +129,35 @@ public class CubeClickLogic : MonoBehaviour
             CubeTransf.localScale -= new Vector3(0.02f, 0.02f, 0.02f);
     }
 
+    IEnumerator AutoClicker()
+    {
+        yield return new WaitForSeconds(_autoclickerWaitTime);
+        OnMouseDown();
+        StartCoroutine("AutoClicker");
+        yield return null;
+    }
+
     private void OnMouseDown()
     {
         Cube.GetComponent<AudioSource>().Play();
         if (CubeTransf.localScale.x < maxCubeSize.x && CubeTransf.localScale.y < maxCubeSize.y && CubeTransf.localScale.z < maxCubeSize.z)
             CubeTransf.localScale += new Vector3(0.2f, 0.2f, 0.2f);
         PlayerPrefs.SetFloat("Score", PlayerPrefs.GetFloat("Score") + PlayerPrefs.GetFloat("CubePerClick") * _scoreMultiply);
+        if (PlayerPrefs.GetString("CPCForEveryClick") == "Yes")
+            PlayerPrefs.SetFloat("CubePerClick", PlayerPrefs.GetFloat("CubePerClick") + 0.01f);
+        if (PlayerPrefs.GetString("SPForEveryClick") == "Yes")
+            PlayerPrefs.SetFloat("SellPrice", PlayerPrefs.GetFloat("SellPrice") + 0.001f);
         //добавление exp + light при повышении уровня
         AddLight();
     }
 
     public void AddExp()
     {
+        if(PlayerPrefs.GetString("ExpIncrease") == "Yes")
+        level.AddExp(PlayerPrefs.GetInt("ExpPerClick"));
+
         level.AddExp(PlayerPrefs.GetInt("ExpPerClick"));
         PlayerPrefs.SetInt("CurrentExp", level.experience);
-        CurrentLvl.text = "LVL: <color=#F3E70D>" + level.currentLevel.ToString() + "</color>";
     }
 
     public void AddLight()
@@ -167,7 +194,6 @@ public class CubeClickLogic : MonoBehaviour
             PlayerPrefs.SetFloat("Gold", PlayerPrefs.GetFloat("Gold") - PlayerPrefs.GetFloat("ExpUpgradePrice"));
             PlayerPrefs.SetFloat("ExpUpgradePrice", PlayerPrefs.GetFloat("ExpUpgradePrice") * 3);
             UpgExpPerClickPrice.text = Math.Round(PlayerPrefs.GetFloat("ExpUpgradePrice")).ToString();
-
         }
     }
 
@@ -175,10 +201,7 @@ public class CubeClickLogic : MonoBehaviour
     {
         if (isUpgradeAvaliable("CubePerClickUpgradePrice"))
         {
-            _cubesPerClick = _cubesPerClick * 1.3f;
-            PlayerPrefs.SetFloat("CubePerClick", _cubesPerClick);
-            _cubesPerClick = PlayerPrefs.GetFloat("CubePerClick");
-            CubesPerClick.text = "<size=34>" + Math.Round(PlayerPrefs.GetFloat("CubePerClick"), 1).ToString() + "</size>";
+            PlayerPrefs.SetFloat("CubePerClick", PlayerPrefs.GetFloat("CubePerClick") * 1.3f);
             PlayerPrefs.SetFloat("Gold", PlayerPrefs.GetFloat("Gold") - PlayerPrefs.GetFloat("CubePerClickUpgradePrice"));
             PlayerPrefs.SetFloat("CubePerClickUpgradePrice", PlayerPrefs.GetFloat("CubePerClickUpgradePrice") * 3);
             UpgCubePerClickPrice.text = Math.Round(PlayerPrefs.GetFloat("CubePerClickUpgradePrice")).ToString();

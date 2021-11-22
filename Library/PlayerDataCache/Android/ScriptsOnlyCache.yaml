@@ -4,6 +4,7 @@ ScriptsOnlyBuild:
     - CanvasControl
     - CubeClickLogic
     - Economic
+    - UpgradeBranchControl
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     UnityEditor.TestRunner.dll:
@@ -56,25 +57,27 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11248}
     - Class: 114
-      Script: {instanceID: 11406}
+      Script: {instanceID: 11356}
     - Class: 114
-      Script: {instanceID: 11446}
+      Script: {instanceID: 11408}
     - Class: 114
-      Script: {instanceID: 11600}
+      Script: {instanceID: 11448}
     - Class: 114
-      Script: {instanceID: 11752}
+      Script: {instanceID: 11602}
     - Class: 114
-      Script: {instanceID: 11842}
+      Script: {instanceID: 11604}
     - Class: 114
-      Script: {instanceID: 12228}
+      Script: {instanceID: 11756}
     - Class: 114
-      Script: {instanceID: 12712}
+      Script: {instanceID: 11846}
     - Class: 114
-      Script: {instanceID: 12754}
+      Script: {instanceID: 12232}
     - Class: 114
-      Script: {instanceID: 13066}
+      Script: {instanceID: 12716}
     - Class: 114
-      Script: {instanceID: 19814}
+      Script: {instanceID: 12758}
+    - Class: 114
+      Script: {instanceID: 13070}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -132,6 +135,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
     className: PlayerQuitHandler
+  - hash:
+      serializedVersion: 2
+      Hash: 0c8c7915e3f803b82028f5df748b9d2b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CanvasControl
   - hash:
       serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb
@@ -218,10 +227,16 @@ ScriptsOnlyBuild:
     className: PhysicsRaycaster
   - hash:
       serializedVersion: 2
-      Hash: 67917cdf7e0b4753016ab13cc9adb95f
+      Hash: 56c320052d732b696e0d71e1928bdfcf
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Economic
+  - hash:
+      serializedVersion: 2
+      Hash: 0b2fa6e6813832b54fc3db90793a93be
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: UpgradeBranchControl
   - hash:
       serializedVersion: 2
       Hash: bd3cf68c8964d3c66d1c43f4f98508c9
@@ -452,7 +467,7 @@ ScriptsOnlyBuild:
     className: BeforeAfterTestCommandState
   - hash:
       serializedVersion: 2
-      Hash: 17e2a18f372299c2c9bb527e21be5a61
+      Hash: e1261cb4757ad043555efdb49d1cb1ff
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CubeClickLogic
@@ -564,12 +579,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: CanvasControl
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
