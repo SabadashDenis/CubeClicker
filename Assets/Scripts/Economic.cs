@@ -4,12 +4,16 @@ using UnityEngine.UI;
 
 public class Economic : MonoBehaviour
 {
-    public Text Gold;
+    [SerializeField]
+    private Text Gold;
     [SerializeField]
     private float _sellPriceIncrease = 1.2f;
-    public Text CubePrice;
-    public Text UpgradePrice;
-    public Image UpgradeArrow;
+    [SerializeField]
+    private Text CubePrice;
+    [SerializeField]
+    private Text UpgradePrice;
+    [SerializeField]
+    private Image UpgradeArrow;
 
     void Start()
     {
@@ -43,13 +47,16 @@ public class Economic : MonoBehaviour
         }
     }
 
-    public void SellCube()
+    [SerializeField]
+    private void SellCube()
     {
         PlayerPrefs.SetFloat("Gold", PlayerPrefs.GetFloat("Gold") + PlayerPrefs.GetFloat("Score") * PlayerPrefs.GetFloat("SellPrice"));
         PlayerPrefs.SetFloat("Score", 0);
     }
 
-    public void IncreaseSellPrice()
+
+    [SerializeField]
+    private void IncreaseSellPrice()
     {
         if (isSellPriceUpgAvaliable())
         {

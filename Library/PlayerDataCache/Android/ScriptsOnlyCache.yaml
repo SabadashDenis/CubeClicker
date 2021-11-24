@@ -233,7 +233,7 @@ ScriptsOnlyBuild:
     className: Economic
   - hash:
       serializedVersion: 2
-      Hash: 0b2fa6e6813832b54fc3db90793a93be
+      Hash: 454546c67c18cf568bfd2f710bf09e9b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: UpgradeBranchControl
@@ -467,7 +467,7 @@ ScriptsOnlyBuild:
     className: BeforeAfterTestCommandState
   - hash:
       serializedVersion: 2
-      Hash: e1261cb4757ad043555efdb49d1cb1ff
+      Hash: 5455c26a1e8b86313f98fe5d59caa191
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CubeClickLogic

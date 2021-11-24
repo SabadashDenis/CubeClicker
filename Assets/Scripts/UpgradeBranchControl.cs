@@ -1,7 +1,6 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 using UnityEngine.SceneManagement;
 
 public class UpgradeBranchControl : MonoBehaviour
@@ -92,24 +91,12 @@ public class UpgradeBranchControl : MonoBehaviour
     }
     public void UpgAutoClicker()
     {
-        if (PlayerPrefs.GetString("AutoClicker") != "Yes" && PlayerPrefs.GetInt("Light") >= upgList[0].Cost)
-        {
-            PlayerPrefs.SetString("AutoClicker", "Yes");
-            PlayerPrefs.SetInt("Light", PlayerPrefs.GetInt("Light") - upgList[0].Cost);
-            LightCount.text = "" + PlayerPrefs.GetInt("Light");
-            CheckedAutoClicker.SetActive(PlayerPrefs.GetString("AutoClicker") != "Yes" ? false : true);
-        }
+        UpgradeBody("AutoClicker", 0, CheckedAutoClicker);
     }
 
     public void UpgExpEncomeIncrease()
     {
-        if (PlayerPrefs.GetString("ExpIncrease") != "Yes" && PlayerPrefs.GetInt("Light") >= upgList[1].Cost)
-        {
-            PlayerPrefs.SetString("ExpIncrease", "Yes");
-            PlayerPrefs.SetInt("Light", PlayerPrefs.GetInt("Light") - upgList[1].Cost);
-            LightCount.text = "" + PlayerPrefs.GetInt("Light");
-            CheckedExpIncrease.SetActive(PlayerPrefs.GetString("ExpIncrease") != "Yes" ? false : true);
-        }
+        UpgradeBody("ExpIncrease", 1, CheckedExpIncrease);
     }
 
     public void UpgSellPriceIncrease()
@@ -140,32 +127,28 @@ public class UpgradeBranchControl : MonoBehaviour
 
     public void UpgCPCForEveryClick()
     {
-        if (PlayerPrefs.GetString("CPCForEveryClick") != "Yes" && PlayerPrefs.GetInt("Light") >= upgList[4].Cost)
-        {
-            PlayerPrefs.SetString("CPCForEveryClick", "Yes");
-            PlayerPrefs.SetInt("Light", PlayerPrefs.GetInt("Light") - upgList[4].Cost);
-            LightCount.text = "" + PlayerPrefs.GetInt("Light");
-            CheckedCubePerClickForEveryClick.SetActive(true);
-        }
+        UpgradeBody("CPCForEveryClick", 4, CheckedCubePerClickForEveryClick);
     }
 
     public void UpgSPForEveryClick()
     {
-        if (PlayerPrefs.GetString("SPForEveryClick") != "Yes" && PlayerPrefs.GetInt("Light") >= upgList[5].Cost)
+        UpgradeBody("SPForEveryClick", 5, CheckerSellPriceForEveryClick);
+    }
+
+    //функция для уменьшения кода
+    private void UpgradeBody(string upgName, int index, GameObject checkedObj)
+    {
+        if (PlayerPrefs.GetString(upgName) != "Yes" && PlayerPrefs.GetInt("Light") >= upgList[index].Cost)
         {
-            PlayerPrefs.SetString("SPForEveryClick", "Yes");
-            PlayerPrefs.SetInt("Light", PlayerPrefs.GetInt("Light") - upgList[5].Cost);
+            PlayerPrefs.SetString(upgName, "Yes");
+            PlayerPrefs.SetInt("Light", PlayerPrefs.GetInt("Light") - upgList[index].Cost);
             LightCount.text = "" + PlayerPrefs.GetInt("Light");
-            CheckerSellPriceForEveryClick.SetActive(true);
+            checkedObj.SetActive(true);
         }
     }
     
     public void EndGame()
     {
-        Debug.Log(PlayerPrefs.GetInt("Light"));
-        Debug.Log(PlayerPrefs.GetInt("Gold"));
-        Debug.Log(PlayerPrefs.GetInt("Score"));
-
         if (PlayerPrefs.GetInt("Light") >= 2500 && PlayerPrefs.GetFloat("Gold") >= 2000000 && PlayerPrefs.GetFloat("Score") >= 500000)
         {
             PlayerPrefs.SetInt("CurrentExp", 1);
@@ -186,30 +169,6 @@ public class UpgradeBranchControl : MonoBehaviour
             PlayerPrefs.SetString("SPForEveryClick", "No");
             PlayerPrefs.SetString("CourotineStarted", "No");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
-            //CheckedAutoClicker.SetActive(false);
-            //CheckedExpIncrease.SetActive(false);
-            //CheckedSellPriceIncrease.SetActive(false);
-            //CheckedCubePerClickIncrease.SetActive(false);
-            //CheckedCubePerClickForEveryClick.SetActive(false);
-            //CheckerSellPriceForEveryClick.SetActive(false);
         }
-
-        Debug.Log(PlayerPrefs.GetInt("CurrentExp"));
-        Debug.Log(PlayerPrefs.GetInt("Light"));
-        Debug.Log(PlayerPrefs.GetInt("ExpPerClick"));
-        Debug.Log(PlayerPrefs.GetFloat("CubePerClick"));
-        Debug.Log(PlayerPrefs.GetFloat("Gold"));
-        Debug.Log(PlayerPrefs.GetFloat("CubePerClickUpgradePrice"));
-        Debug.Log(PlayerPrefs.GetFloat("ExpUpgradePrice"));
-        Debug.Log(PlayerPrefs.GetFloat("CubePriceUpgradePrice"));
-        Debug.Log(PlayerPrefs.GetFloat("Score"));
-        Debug.Log(PlayerPrefs.GetFloat("SellPrice"));
-        Debug.Log(PlayerPrefs.GetString("AutoClicker"));
-        Debug.Log(PlayerPrefs.GetString("ExpIncrease"));
-        Debug.Log(PlayerPrefs.GetString("SellPriceIncrease"));
-        Debug.Log(PlayerPrefs.GetString("CubePerClickIncrease"));
-        Debug.Log(PlayerPrefs.GetString("CPCForEveryClick"));
-        Debug.Log(PlayerPrefs.GetString("SPForEveryClick"));
     }
 }

@@ -2,12 +2,12 @@
 using UnityEngine.UI;
 
 [ExecuteInEditMode]
-public class ProgressBar
+ public class ProgressBar
 {
-    public int maximum;
-    public int minimum;
-    public int current;
-    public Image mask;
+    private int maximum;
+    private int minimum;
+    private int current;
+    private Image mask;
 
     public ProgressBar(int curr,int min, int max, Image mask)
     {

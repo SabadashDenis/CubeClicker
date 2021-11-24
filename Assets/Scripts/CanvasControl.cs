@@ -18,13 +18,7 @@ public class CanvasControl : MonoBehaviour
         GetComponent<AudioSource>().Play();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void MusicOnOff()
+    private void MusicOnOff()
     {
         if(PlayerPrefs.GetString("Music") == "On")
         {

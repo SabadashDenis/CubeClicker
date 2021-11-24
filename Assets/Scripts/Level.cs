@@ -1,14 +1,26 @@
 ﻿using System;
-using UnityEngine;
-using UnityEngine.UI;
 
-[System.Serializable]
+[Serializable]
 public class Level
 {
-    public int experience;
-    public int currentLevel;
-    public int MAX_EXP;
-    public int maxLevel = 100;
+    private int experience;
+    private int currentLevel;
+    private int MAX_EXP;
+    private int maxLevel = 100;
+
+    public int Experience
+    {
+        get { return experience; }
+
+        set { experience = value; }
+    }
+
+    public int CurrentLevel
+    {
+        get { return currentLevel; }
+
+        set { currentLevel = value; }
+    }
 
     public Level(int level)
     {
